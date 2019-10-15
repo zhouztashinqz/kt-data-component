@@ -1,0 +1,65 @@
+apply plugin: 'com.android.library'
+apply plugin: 'org.greenrobot.greendao' // 在根目录build.gradle需要添加配置  classpath 'org.greenrobot:greendao-gradle-plugin:3.2.2'
+apply plugin: 'kotlin-android-extensions'
+apply plugin: 'kotlin-android'
+
+android {
+    compileSdkVersion buildconfig.compileSdkVersion
+
+
+
+    defaultConfig {
+        minSdkVersion buildconfig.minSdkVersion
+        targetSdkVersion buildconfig.targetSdkVersion
+        versionCode 1
+        versionName "1.0"
+    }
+
+    buildTypes {
+        release {
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+        }
+    }
+    lintOptions {
+        abortOnError false
+    }
+}
+
+/**
+ * 移除重复的类
+ */
+String packagePath = "/com/snowofsunflower/android/data/db/greendaoimpl/"
+//String classesPath = "/intermediates/classes/debug"
+String classesPath = "/intermediates/javac/debug/compileDebugJavaWithJavac/classes"
+String path =  buildDir.path+classesPath+packagePath
+gradle.getTaskGraph().whenReady {
+    project.tasks.all {
+        Task t = it
+        if(t.getName().contains("compileDebugJavaWithJavac")){
+            t.doLast {
+                File fileDaoMaster = new File(path +'DaoMaster.class')
+                File fileDevHelper = new File(path + 'DaoMaster$DevOpenHelper.class')
+                File fileDaoSession = new File(path +'DaoSession.class')
+                File fileOpenHelper = new File(path +'DaoMaster$OpenHelper.class')
+                boolean result = fileDaoMaster.delete()
+                boolean result2 = fileDevHelper.delete()
+                boolean result3 = fileDaoSession.delete()
+                boolean result4 = fileOpenHelper.delete()
+                System.out.println("zhou:"+result+","+result2+","+result3+","+result4)
+                //System.out.println("path11:"+path+",fileDaoMaster"+fileDaoMaster.path)
+             //   System.out.println("zhou result::"+result+"result2:"+result2+",file"+fileDaoMaster.path)
+
+            }
+        }
+    }
+}
+
+
+dependencies {
+    implementation fileTree(dir: 'libs', include: ['*.jar'])
+    implementation sourcelib.green_dao
+    implementation sourcelib.sqlcipher
+    implementation googlelib.kotlin
+    compile 'com.github.yuweiguocn:GreenDaoUpgradeHelper:v2.1.0'
+}
