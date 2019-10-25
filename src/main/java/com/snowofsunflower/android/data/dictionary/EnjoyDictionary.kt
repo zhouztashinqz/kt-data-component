@@ -47,9 +47,8 @@ class EnjoyDictionary {
                         is Boolean -> edit.putBoolean(key, o).commit()
                         is String -> edit.putString(key, o).commit()
                         else -> false
-
                     }
-                    //TODO Elvis运算符是否加大了阅读的难度？
+                    //Elvis运算符是否加大了阅读的难度？
                 } ?: false
                 result
             } ?: false

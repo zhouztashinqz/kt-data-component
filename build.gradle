@@ -1,7 +1,7 @@
 apply plugin: 'com.android.library'
 apply plugin: 'org.greenrobot.greendao' // 在根目录build.gradle需要添加配置  classpath 'org.greenrobot:greendao-gradle-plugin:3.2.2'
-apply plugin: 'kotlin-android-extensions'
 apply plugin: 'kotlin-android'
+apply plugin: 'kotlin-android-extensions'
 
 android {
     compileSdkVersion buildconfig.compileSdkVersion
